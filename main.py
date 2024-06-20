@@ -1,4 +1,6 @@
 from collections import deque
+import time
+from memory_profiler import memory_usage
 
 russian_alphabet = "йцукенгшщзхъфывапролджэячсмитьбю"
 
@@ -49,11 +51,17 @@ def bfs(adjacency_list, start, end):
     return None
 
 
+start_word = input()
+end_word = input()
+start_time = time.time()
 file = open("words.txt", "r", encoding="utf-8")
 word_list = file.read()
 words = word_list.split()
 adj_list = build_adjacency_list(words)
-start_word = input()
-end_word = input()
 chain = bfs(adj_list, start_word, end_word)
 file.close()
+end_time = time.time()
+execution_time = end_time - start_time
+print('\n')
+print(f"Время выполнения программы: {execution_time} секунд")
+
