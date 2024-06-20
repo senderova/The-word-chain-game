@@ -1,14 +1,13 @@
 from collections import deque
 import time
-from memory_profiler import memory_usage
-
-russian_alphabet = "йцукенгшщзхъфывапролджэячсмитьбю"
+import string
+import psutil
 
 
 def generate_adjacent_words(word, word_set):
     adjacent_words = []
     for i in range(len(word)):
-        for letter in russian_alphabet:
+        for letter in string.ascii_lowercase:
             if letter != word[i]:
                 new_word = word[:i] + letter + word[i + 1:]
                 if new_word in word_set:
@@ -24,7 +23,7 @@ def build_adjacency_list(words_list):
 
 def bfs(adjacency_list, start, end):
     if start not in adjacency_list or end not in adjacency_list:
-        print("Слово не найдено в словаре")
+        print("The word was not found in the dictionary")
         return None
 
     queue = deque([[start]])
@@ -36,7 +35,7 @@ def bfs(adjacency_list, start, end):
 
         if current_word == end:
             print(f"{start_word} ---> {end_word}:")
-            print("Цепочка:", end='')
+            print("Chain:", end='')
             for step in way:
                 print(f" -> {step}", end='')
             return way
@@ -47,14 +46,15 @@ def bfs(adjacency_list, start, end):
                 new_way = list(way)
                 new_way.append(neighbor)
                 queue.append(new_way)
-    print("Цепочки не существует")
+    print("The chain does not exist")
     return None
 
 
+process = psutil.Process()
 start_word = input()
 end_word = input()
 start_time = time.time()
-file = open("words.txt", "r", encoding="utf-8")
+file = open("english_words.txt", "r", encoding="utf-8")
 word_list = file.read()
 words = word_list.split()
 adj_list = build_adjacency_list(words)
@@ -63,5 +63,7 @@ file.close()
 end_time = time.time()
 execution_time = end_time - start_time
 print('\n')
-print(f"Время выполнения программы: {execution_time} секунд")
+print(f"Program execution time: {execution_time} seconds")
+print(f"Memory consumption: {process.memory_info().rss} bytes")
+
 
